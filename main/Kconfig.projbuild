@@ -1,0 +1,34 @@
+# custom config values
+menu "Internetinio mygtuko konfigūracija"
+config MYGTUKAS_WIFI_SSID
+	string "WiFi SSID"
+	default "myssid"
+	help
+	SSID (WiFi tinklo pavadinimas), prie kurio automatiškai prisijungti.
+
+config MYGTUKAS_WIFI_PASSWORD
+	string "WiFi slaptažodis"
+	default "mypassword"
+	help
+	WiFi slaptažodis (WPA ar WPA2).
+
+config MYGTUKAS_GPIO_POWER
+	int "Įjungimo GPIO nr."
+	default 0
+	help
+	GPIO, per kurį bus siunčiamas įjungimo signalas.
+
+config MYGTUKAS_GPIO_POWER_STATE
+	int "Stebėjimo GPIO nr."
+	default 2
+	help
+	GPIO, kuris prijungtas prie kompiuterio „POWER LED“. Pagal tai ar led'as šviečia
+	kompiuteriukas žino ar kompas įjungtas.
+
+config MYGTUKAS_GPIO_ONLINE
+	int "Indikacinio GPIO nr."
+	default 4
+	help
+	GPIO, kuris užsidegs kai kompiuteriukas bus užsikrovęs ir pasiruošęs priimti užklausas.
+
+endmenu
