@@ -5,6 +5,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <driver/gpio.h>
+#include <esp_system.h>
 #include <esp_log.h>
 #include "gpio.h"
 
@@ -80,4 +81,17 @@ int gpio_is_pc_powered()
 {
 	config();
 	return !gpio_get_level(CONFIG_MYGTUKAS_GPIO_POWER_STATE);
+}
+
+void reset_gpio_state()
+{
+	gpio_set_level(CONFIG_MYGTUKAS_GPIO_ONLINE, 0);
+	gpio_set_level(CONFIG_MYGTUKAS_GPIO_POWER, 0);
+}
+
+void init_gpio()
+{
+	config();
+	reset_gpio_state();
+	esp_register_shutdown_handler(&reset_gpio_state);
 }
