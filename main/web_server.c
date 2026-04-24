@@ -5,6 +5,8 @@
 #include <esp_log.h>
 #include <esp_event.h>
 #include <esp_http_server.h>
+#include <esp_wifi_types.h>
+#include <esp_netif.h>
 
 #include "gpio.h"
 #include "puslapis.h"
@@ -69,10 +71,16 @@ static esp_err_t mygtukas_post_handler(httpd_req_t *req)
 
 	ESP_LOGI(TAG, "POST: %.*s", ret, buf);
 
-	if(strcmp(buf, "action=power") == 0) //Jeigu buvo paspaustas mygtukas
+	if(ret == 12 && strncmp(buf, "action=power", ret) == 0) //Jeigu buvo paspaustas mygtukas
 	{
 		ESP_LOGI(TAG, "Įjungimas!");
 		gpio_trigger_pc_power_btn();
+	}
+
+	if(ret == 11 && strncmp(buf, "action=long", ret) == 0) //Jeigu buvo paspaustas mygtukas
+	{
+		ESP_LOGI(TAG, "Išjungiamas!");
+		gpio_trigger_pc_power_long_btn();
 	}
 
 	//Redirect'inam į GET puslapį

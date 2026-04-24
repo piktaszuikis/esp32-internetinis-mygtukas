@@ -34,7 +34,7 @@ void config()
 	}
 
 	//Indikacinio led'o GPIO
-	if( !GPIO_IS_VALID_GPIO(CONFIG_MYGTUKAS_GPIO_ONLINE) )
+	if( !GPIO_IS_VALID_OUTPUT_GPIO(CONFIG_MYGTUKAS_GPIO_ONLINE) )
 	{
 		ESP_LOGE(TAG, "Bloga konfigūracija: netinkama CONFIG_MYGTUKAS_GPIO_ONLINE reikšmė '%d'. Nėra tokio GPIO!", CONFIG_MYGTUKAS_GPIO_ONLINE);
 		abort();
@@ -63,10 +63,22 @@ void gpio_trigger_pc_power_btn()
 	config();
 	
 	ESP_ERROR_CHECK(gpio_set_level(CONFIG_MYGTUKAS_GPIO_POWER, 1));
-	vTaskDelay(700 / portTICK_RATE_MS); //Galima dėti ir trumpesnį, bet noriu, kad matytųsi kaip led'as šviečia
+	vTaskDelay(700 / portTICK_PERIOD_MS); //Galima dėti ir trumpesnį, bet noriu, kad matytųsi kaip led'as šviečia
 	
 	ESP_ERROR_CHECK(gpio_set_level(CONFIG_MYGTUKAS_GPIO_POWER, 0));
-	vTaskDelay(1000 / portTICK_RATE_MS); //Duodam šansą užsidegti kompiuterio "POWER LED"'ui.
+	vTaskDelay(1000 / portTICK_PERIOD_MS); //Duodam šansą užsidegti kompiuterio "POWER LED"'ui.
+}
+
+//Ilgai "Paspausti" kompiuterio įjungimo mygtuką
+void gpio_trigger_pc_power_long_btn()
+{
+	config();
+
+	ESP_ERROR_CHECK(gpio_set_level(CONFIG_MYGTUKAS_GPIO_POWER, 1));
+	vTaskDelay(10 * 1000 / portTICK_PERIOD_MS); //10 s. spausti įjungimo mygtuką
+
+	ESP_ERROR_CHECK(gpio_set_level(CONFIG_MYGTUKAS_GPIO_POWER, 0));
+	vTaskDelay(1000 / portTICK_PERIOD_MS);
 }
 
 //Indikacinio LED'o valdymas

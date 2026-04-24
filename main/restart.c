@@ -6,7 +6,7 @@
 
 static const char* TAG = "mygtukas-autorestart";
 
-void timer_callback()
+void timer_callback(void *arg)
 {
 	ESP_LOGI(TAG, "Reguliarus persikrovimas! Nuo paskutinio įjungimo praėjo %lld sekundžių.", esp_timer_get_time() / (int64_t)1e6);
 	esp_restart();
@@ -21,5 +21,5 @@ void init_autoreboot()
 	esp_timer_handle_t timer;
 
 	ESP_ERROR_CHECK(esp_timer_create(&config, &timer));
-	ESP_ERROR_CHECK(esp_timer_start_periodic(timer, 60 * 60e6 /*60 * 60e6 */)); //kas 1 valandą
+	ESP_ERROR_CHECK(esp_timer_start_periodic(timer, 60 * 60e6)); //kas 1 valandą
 }
